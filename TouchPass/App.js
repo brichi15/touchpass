@@ -1,26 +1,25 @@
 import React from 'react';
-import { AppRegistry, StyleSheet, Text, View, Image } from 'react-native';
+import { AppRegistry, SectionList, StyleSheet, Text, View, Image } from 'react-native';
+import Load from './components/load';
 
-
-export default class AlignItemsBasics extends React.Component {
+export default class App extends React.Component {
+  state = {
+    loaded: false
+  }
+  constructor(){
+    super();
+    Load.load(v => this.setState({loaded: true}));
+  }
   render() {
     return (
-      // Try setting `alignItems` to 'flex-start'
-      // Try setting `justifyContent` to `flex-end`.
-      // Try setting `flexDirection` to `row`.
-      <View style={{
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'flex-start',
-      }}>
-        <View style={{width: 50, height: 50, backgroundColor: 'powderblue'}} />
-        <View style={{height: 50, backgroundColor: 'skyblue'}} />
-        <View style={{height: 100, backgroundColor: 'steelblue'}} />
+      <View style={{width: 100, height: 50}}>
+        {this.state.loaded ? <Text> Welcome!</Text> : <Image source={require('./wp3148317.jpg')}/>}
       </View>
     );
-  }
-};
+}
+}
+  
+
 
 // skip this line if using Create React Native App
-AppRegistry.registerComponent('AwesomeProject', () => AlignItemsBasics);
+AppRegistry.registerComponent('TouchPass', () => App);
