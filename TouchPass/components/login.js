@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppRegistry, SectionList, StyleSheet, Text, View, Image } from 'react-native';
 import * as firebase from 'firebase';
+import { createSwitchNavigator, navigate, navigation } from 'react-navigation'
 
 // Initialize Firebase
 var firebaseConfig = {
@@ -15,8 +16,11 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 import { Container, Content, Header, Form, Input, Item, Button, Label} from 'native-base'
+import Main from './main'
 
 export default class Login extends React.Component {
+
+
 
 
   componentDidMount(){
@@ -28,20 +32,23 @@ export default class Login extends React.Component {
     })
   }
 
-  async loginWithFacebook(){
+    async loginWithFacebook(){
 
     const {type,token} = await Expo.Facebook.logInWithReadPermissionsAsync('248445412505612', {permissions: ['public_profile']})
 
     if (type == 'success') {
 
       const credential = firebase.auth.FacebookAuthProvider.credential(token)
-      firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {
+      firebase.auth().signInAndRetrieveDataWithCredential(credential).then(() => this.props.navigation.navigate('Main')).catch((error) => {
         console.log(error)
       })
+      
 
-    }
+    
 
-  }
+  }}
+
+
   render() {
     return (
       <Container>
