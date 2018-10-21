@@ -6,11 +6,13 @@ import { Container, Content, Header, Form, Input, Item, Button, Label} from 'nat
 
 import Loading from './components/load'
 import Login from './components/login'
+import Main from './components/main'
 
 const App = createSwitchNavigator(
   {
     Loading,
-    Login
+    Login,
+    Main
   },
   {
   initialRouteName: 'Loading'
