@@ -1,90 +1,61 @@
 import React from 'react';
-import { StyleSheet, Text, View, AppRegistry } from 'react-native';
+import { AppRegistry, SectionList, StyleSheet, Text, View, Image } from 'react-native';
 import * as firebase from 'firebase';
-import { Container, Content, Header, Form, Input, Item, Button, Label } from 'native-base'
 
-const firebaseConfig = {
-    apiKey: "AIzaSyAfW-k17fTieeBHLTzFVtJXG4uRwyoOhWA",
-    authDomain: "touchpass-bf2cb.firebaseapp.com",
-    databaseURL: "https://touchpass-bf2cb.firebaseio.com",
-    projectId: "touchpass-bf2cb",
-    storageBucket: "touchpass-bf2cb.appspot.com"
-  };
+// Initialize Firebase
+var firebaseConfig = {
+  apiKey: "AIzaSyAfW-k17fTieeBHLTzFVtJXG4uRwyoOhWA",
+  authDomain: "touchpass-bf2cb.firebaseapp.com",
+  databaseURL: "https://touchpass-bf2cb.firebaseio.com",
+  projectId: "touchpass-bf2cb",
+  storageBucket: "touchpass-bf2cb.appspot.com",
+  messagingSenderId: "922588327406"
+};
 
 firebase.initializeApp(firebaseConfig);
 
-export default class LoginPage extends React.Component {
-  constructor(props){
-    super(props)
+import { Container, Content, Header, Form, Input, Item, Button, Label} from 'native-base'
 
-    this.state= ({
-      email: '',
-      password: ''
+export default class Login extends React.Component {
+
+
+  componentDidMount(){
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if(user != null){
+        console.log(user)
+      }
     })
   }
 
-  signUpUser = (email, password) => {
+  async loginWithFacebook(){
 
-    try{
-      if(this.state.password.length<6){
-        alert("Please enter at least 6 characters")
-        return;
-      }
+    const {type,token} = await Expo.Facebook.logInWithReadPermissionsAsync('248445412505612', {permissions: ['public_profile']})
 
-      firebase.auth().createUserWithEmailAndPassword(email,password)
+    if (type == 'success') {
 
-    }
-    catch(error){
-      console.log(error.toString())
-    }
-  }
-
-  loginUser = (email, password) => {
-
-    try{
-      firebase.auth().signInWithEmailAndPassword(email,password).then(function(user){
-        console.log(user)
+      const credential = firebase.auth.FacebookAuthProvider.credential(token)
+      firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {
+        console.log(error)
       })
 
     }
-    catch(error){
-      console.log(error.toString())
-    }
 
   }
-
-  
   render() {
     return (
-      <Container style={styles.container}>
+      <Container>
         <Form>
-          <Item floatingLabel>
-            <Label>Email</Label>
-            <Input keyboardType="email-address" autoCorrect={false} autoCapitalize="none" onChangeText={(email) => this.setState({email})}/>
-          </Item>
-
-          <Item floatingLabel>
-            <Label>Password</Label>
-            <Input secureTextEntry={true} onChangeText={(password) => this.setState({password})} autoCorrect={false} autoCapitalize="none"/>
-          </Item>
-          <Button style={{marginTop: 10}} onPress={()=>this.loginUser(this.state.email,this.state.password)} full rounded success>
-              <Text style={{ color:'white' }}>Login</Text>
-            </Button>
-
-            <Button style={{marginTop: 10}} onPress={() => this.signUpUser(this.state.email, this.state.password)} full rounded primary>
-              <Text style={{ color:'white' }}>Sign Up</Text>
-            </Button>
+          <Button
+          full
+          rounded
+          primary
+          onPress= {() => this.loginWithFacebook()}
+          >
+            <Text style={{color:'white'}}>Login With Facebook</Text>
+          </Button>
         </Form>
       </Container>
     );
-  }
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-  },
-});
+}
