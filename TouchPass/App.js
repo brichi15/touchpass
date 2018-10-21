@@ -1,20 +1,61 @@
 import React from 'react';
 import { AppRegistry, SectionList, StyleSheet, Text, View, Image } from 'react-native';
-import Load from './components/load';
+import * as firebase from 'firebase';
+
+// Initialize Firebase
+var firebaseConfig = {
+  apiKey: "AIzaSyAfW-k17fTieeBHLTzFVtJXG4uRwyoOhWA",
+  authDomain: "touchpass-bf2cb.firebaseapp.com",
+  databaseURL: "https://touchpass-bf2cb.firebaseio.com",
+  projectId: "touchpass-bf2cb",
+  storageBucket: "touchpass-bf2cb.appspot.com",
+  messagingSenderId: "922588327406"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+import { Container, Content, Header, Form, Input, Item, Button, Label} from 'native-base'
 
 export default class App extends React.Component {
-  state = {
-    loaded: false
+
+
+  componentDidMount(){
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if(user != null){
+        console.log(user)
+      }
+    })
   }
-  constructor(){
-    super();
-    Load.load(v => this.setState({loaded: true}));
+
+  async loginWithFacebook(){
+
+    const {type,token} = await Expo.Facebook.logInWithReadPermissionsAsync('248445412505612', {permissions: ['public_profile']})
+
+    if (type == 'success') {
+
+      const credential = firebase.auth.FacebookAuthProvider.credential(token)
+      firebase.auth().signInWithCredential(credential).catch((error) => {
+        console.log(error)
+      })
+
+    }
+
   }
   render() {
     return (
-      <View style={{width: 100, height: 50}}>
-        {this.state.loaded ? <Text> Welcome!</Text> : <Image source={require('./wp3148317.jpg')}/>}
-      </View>
+      <Container>
+        <Form>
+          <Button
+          full
+          rounded
+          primary
+          onPress= {() => this.loginWithFacebook()}
+          >
+            <Text style={{color:'white'}}>Login With Facebook</Text>
+          </Button>
+        </Form>
+      </Container>
     );
 }
 }
