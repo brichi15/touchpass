@@ -1,5 +1,5 @@
 import React from'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Image} from 'react-native';
 import Login from './login'
 import Load from './help'
 
@@ -16,7 +16,10 @@ export default class Loading extends React.Component {
     render() {
       return (
         <View style={styles.container}>
-          {this.state.loaded ? <Login/> : <View style={styles.container}><Text>Loading styll</Text></View>}
+          {this.state.loaded ? <Login/> : 
+          <View style={styles.splash}>
+            <Text style={styles.txt}>TouchPass</Text>
+          </View>}
         </View>
       )
     }
@@ -26,6 +29,19 @@ export default class Loading extends React.Component {
       flex: 1,
       //justifyContent: 'center',
       //alignItems: 'center',
-      backgroundColor: 'green'
-    }
+      backgroundColor: '#00d439'
+    },
+
+    splash: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 180,
+    },
+   
+
+    txt: {
+      fontSize: 55,
+      color: '#fff',
+
+    },
   })

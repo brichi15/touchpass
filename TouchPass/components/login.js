@@ -51,18 +51,64 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <Container>
-        <Form>
+      <View style={styles.container}>
+        <View style={styles.titleBox}>
+          <Text style={styles.title}>TouchPass</Text>
+          <Text style={styles.h1}>Pay faster, Do more</Text>
+        </View>
+   
+        <View style={styles.buttonBox}>
           <Button
           full
           rounded
           primary
           onPress= {() => this.loginWithFacebook()}
+
           >
-            <Text style={{color:'white'}}>Login With Facebook</Text>
+            <Text style={styles.buttonText}>Login With Facebook</Text>
           </Button>
-        </Form>
-      </Container>
+        </View>   
+      </View>
     );
 }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff'
+  },
+
+  buttonBox: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 40,
+    padding: 20,
+    marginTop: 40,
+    
+  },
+
+  buttonText: {
+    color: '#fff',
+    fontSize: 20, 
+
+  },
+  titleBox: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    marginTop: 180,
+
+
+  },
+  title: {
+    color: '#00d439',
+    fontSize: 55,
+
+  },
+  h1: {
+    fontSize: 22,
+    color: '#00d439',
+  },
+
+})
